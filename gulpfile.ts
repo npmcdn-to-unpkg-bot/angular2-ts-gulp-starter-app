@@ -8,7 +8,7 @@ const tslinst = require("gulp-tslint");
 // clean build task
 gulp.task('clean', (cb) => {
   return del(["build"], cb);
-};
+});
 
 // typescript compiler task
 gulp.task('compile', () => {
@@ -36,6 +36,15 @@ gulp.task("libs", () => {
     '@angular/**'
   ],  {cwd: "node_modules/**"}) /* Glob required here. */
     .pipe(gulp.dest("build/lib"));
+});
+
+gulp.task('watch', function () {
+    gulp.watch(["src/**/*.ts"], ['compile']).on('change', function (e) {
+        console.log('TypeScript file ' + e.path + ' has been changed. Compiling.');
+    });
+    gulp.watch(["src/**/*.html", "src/**/*.css"], ['resources']).on('change', function (e) {
+        console.log('Resource file ' + e.path + ' has been changed. Updating.');
+    });
 });
 
 gulp.task("build", ["compile", "resources", "libs"], () => {
